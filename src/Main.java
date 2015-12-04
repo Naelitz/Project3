@@ -24,14 +24,16 @@ public class Main
 			{
 				// make call to sorting method here (just remove //)
 				// bubbleSort();
-				//insertionSort();
+				// insertionSort();
 				// selectionSort();
-				 quickSort(0, size - 1);
+				quickSort(0, size - 1);
+
 				// shellSort();
 				// TODO Auto-generated method stub
 			}
-			System.out.println(size + " " + time / repCount);
+			System.out.println(compareCount / repCount);
 			statClear();
+
 		}
 	}
 
@@ -140,70 +142,74 @@ public class Main
 	}
 
 	static int split(int first, int last)
-	{
-		int splitVal = numArray[first];
-		int saveF = first;
-		boolean onCorrectSide;
+	 {
+		 
+	   int splitVal = numArray[first];
+	   int saveF = first;
+	   boolean onCorrectSide;
+	 
+	   first++;
+	   do
+	   {
+	     onCorrectSide = true;
+	     while (onCorrectSide)             // move first toward last
+	     {
+	   	  compareCount++;
+	   	  if (numArray[first] > splitVal)	
+	   		  onCorrectSide = false;
+	         else
+	         {
+	       	  first++;
+	       	  onCorrectSide = (first <= last);
+	         }
+	     }//End of while loop
 
-		first++;
-		do
-		{
-			onCorrectSide = true;
-			while (onCorrectSide) // move first toward last
-				if (numArray[first] > splitVal)
-					onCorrectSide = false;
-				else
-				{
-					first++;
-					onCorrectSide = (first <= last);
-				}
+	     onCorrectSide = (first <= last);
+	     while (onCorrectSide)             // move last toward first
+	     {
+	   	  compareCount++;
+	   	  if (numArray[last] <= splitVal)
+	   		  onCorrectSide = false;
+	         else
+	         {
+	       	  last--;
+	       	  onCorrectSide = (first <= last);
+	         }
+	     }//End of while loop
+	     
+	     if (first < last)                
+	     {
+	       swap(first, last);
+	       first++;
+	       last--;
+	     }
+	   } //End of do while.
+	   while (first <= last);
+	   	swap(saveF, last);
+	   return last;
+	 }//End of split
 
-			onCorrectSide = (first <= last);
-			while (onCorrectSide) // move last toward first
-				if (numArray[last] <= splitVal)
-					onCorrectSide = false;
-				else
-				{
-					last--;
-					onCorrectSide = (first <= last);
-				}
+	 static void quickSort(int first, int last)
+	 {
+	   if (first < last)
+	   {
+	     int splitPoint;
+	 
+	     splitPoint = split(first, last);
+	     // values[first]..values[splitPoint - 1] <= splitVal
+	     // values[splitPoint] = splitVal
+	     // values[splitPoint+1]..values[last] > splitVal
+	 
+	     quickSort(first, splitPoint - 1);
+	     quickSort(splitPoint + 1, last);
+	   }
+	 }
 
-			if (first < last)
-			{
-				swap(first, last);
-				first++;
-				last--;
-			}
-		} while (first <= last);
 
-		swap(saveF, last);
-		return last;
-	}
-
-	static void quickSort(int first, int last)
-	{
-		System.out.println(first + " " + last);
-		double startTime = System.currentTimeMillis();
-		if (first < last)
-		{
-			int splitPoint;
-
-			splitPoint = split(first, last);
-			// values[first]..values[splitPoint - 1] <= splitVal
-			// values[splitPoint] = splitVal
-			// values[splitPoint+1]..values[last] > splitVal
-
-			quickSort(first, splitPoint - 1);
-			quickSort(splitPoint + 1, last);
-		}
-		time += (System.currentTimeMillis() - startTime);
-		
-	}
-
-	static void shellSort()
-	{
-		
-	}
+	/*
+	 * static void shellSort(int num[],int N, int interval[]) { p = 0; do { k =
+	 * interval[p]; for(i = 0; i < (N - k); i++) { for } } }
+	 */
 
 	static void print(int size)
 	{
